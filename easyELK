@@ -1,0 +1,45 @@
+#!/bin/bash
+echo =============================================================== 
+echo ====================== easyELK Installer ======================
+echo ============= ELK Stack for Debian-based Systems ==============
+echo ============== Elasticsearch = Logstash = Kibana ==============
+echo ===============================================================
+sudo apt update -y
+sudo apt upgrade -y 
+echo ===============================================================
+echo =================== Installing Java 8 =========================
+echo ===============================================================
+# ref: https://computingforgeeks.com/how-to-install-java-8-on-ubuntu/
+sudo apt install openjdk-8-jdk wget -y
+echo ===============================================================
+echo ================== Installing Elasticsearch ===================
+echo ===============================================================
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+sudo apt-get install apt-transport-https
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list 
+sudo apt-get update && sudo apt-get install elasticsearch
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+sudo /bin/systemctl start elasticsearch.service
+echo ===============================================================
+echo ==================== Installing Kibana ========================
+echo ===============================================================
+sudo apt-get update && sudo apt-get install kibana
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable kibana.service
+sudo /bin/systemctl start kibana.service
+echo ===============================================================
+echo ===================== Installing Logstash =====================
+echo ===============================================================
+sudo apt-get update && sudo apt-get install logstash
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable logstash.service
+sudo /bin/systemctl start logstash.service
+echo ===============================================================
+echo =============== Your Turn: Finish Configuration ===============
+echo ===============================================================
+
+
+
+
+
