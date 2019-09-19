@@ -32,11 +32,11 @@ easyELK will perform the following steps:
 ## Post Installation
 After the installation completes, follow the configuration guides below:
 
-[Elasticsearch] (https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html)
+[Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html)
 
-[Kibana] (https://www.elastic.co/guide/en/kibana/current/settings.html)
+[Kibana](https://www.elastic.co/guide/en/kibana/current/settings.html)
 
-[Logstash] (https://www.elastic.co/guide/en/logstash/current/configuration.html)
+[Logstash](https://www.elastic.co/guide/en/logstash/current/configuration.html)
 
-Check out [Beats] (https://www.elastic.co/products/beats) and prepare data shippers.
+Check out [Beats](https://www.elastic.co/products/beats) and prepare data shippers.
 
