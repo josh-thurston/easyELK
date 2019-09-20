@@ -1,45 +1,70 @@
 #!/bin/bash
-echo =============================================================== 
-echo ====================== easyELK Installer ======================
-echo ============= ELK Stack for Debian-based Systems ==============
-echo ============== Elasticsearch = Logstash = Kibana ==============
-echo ===============================================================
-sudo apt update -y
-sudo apt upgrade -y 
-echo ===============================================================
-echo =================== Installing Java 8 =========================
-echo ===============================================================
+echo "---------------------------------------------------------------" 
+echo " $(date)"
+echo " Starting easyELK Installer "
+echo " ELK Stack for Debian-based Systems "
+echo " Elasticsearch - Logstash - Kibana "
+echo "---------------------------------------------------------------"
+echo " easyELK Status "
+echo ""
+echo " System Update... "
+
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq update > /dev/null
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade > /dev/null
+
+echo " System Update - Complete "
+echo " Install Java 8... "
+
 # ref: https://computingforgeeks.com/how-to-install-java-8-on-ubuntu/
-sudo apt install openjdk-8-jdk wget -y
-echo ===============================================================
-echo ================== Installing Elasticsearch ===================
-echo ===============================================================
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install openjdk-8-jdk wget > /dev/null
+
+echo " InstallJava 8 - Complete "
+echo " Install Elasticsearch... "
+
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-sudo apt-get install apt-transport-https
-echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list 
-sudo apt-get update && sudo apt-get install elasticsearch
-sudo /bin/systemctl daemon-reload
-sudo /bin/systemctl enable elasticsearch.service
-sudo /bin/systemctl start elasticsearch.service
-echo ===============================================================
-echo ==================== Installing Kibana ========================
-echo ===============================================================
-sudo apt-get update && sudo apt-get install kibana
-sudo /bin/systemctl daemon-reload
-sudo /bin/systemctl enable kibana.service
-sudo /bin/systemctl start kibana.service
-echo ===============================================================
-echo ===================== Installing Logstash =====================
-echo ===============================================================
-sudo apt-get update && sudo apt-get install logstash
-sudo /bin/systemctl daemon-reload
-sudo /bin/systemctl enable logstash.service
-sudo /bin/systemctl start logstash.service
-echo ===============================================================
-echo =============== Your Turn: Finish Configuration ===============
-echo ===============================================================
+sudo apt-get -yq install apt-transport-https > /dev/null
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list > /dev/null
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq update > /dev/null && sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install elasticsearch > /dev/null
 
+echo " Install Elasticsearch - Complete "
+echo " Installing Kibana... "
 
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq update > /dev/null && sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install kibana > /dev/null
 
+echo " Install Kibana - Complete "
+echo " Installing Logstash... "
 
+sudo DEBIAN_FRONTEND=noninteractive apt-get -yq update > /dev/null && sudo DEBIAN_FRONTEND=noninteractive apt-get -yq install logstash > /dev/null
 
+echo " Install Logstash - Complete "
+echo " Enabling Services for Start on Boot "
+echo " Starting Elastic, Logstash, Kibana Services "
+
+sudo /bin/systemctl -q daemon-reload > /dev/null
+sudo /bin/systemctl -q enable elasticsearch.service > /dev/null
+sudo /bin/systemctl -q enable logstash.service > /dev/null
+sudo /bin/systemctl -q enable kibana.service > /dev/null
+sudo /bin/systemctl -q start elasticsearch.service > /dev/null
+sudo /bin/systemctl -q start logstash.service > /dev/null
+sudo /bin/systemctl -q start kibana.service > /dev/null
+
+echo " Service Status: "
+function checkIt()
+{
+ ps auxw | grep -P '\b'$1'(?!-)\b' >/dev/null
+ if [ $? != 0 ]
+ then
+   echo $1" Not Running";
+ else
+   echo $1" Running";
+ fi;
+}
+
+checkIt "   elasticsearch"
+checkIt "   logstash"
+checkIt "   kibana"
+
+echo " $(date)"
+echo " Finished easyELK Installer"
+echo " Your Turn: Finish Configuration "
+echo "---------------------------------------------------------------"
