@@ -48,14 +48,29 @@ easyELK will perform the following steps:
  
  Scroll down to the Network Section
  
- 1. Uncomment network.host: 
+ 1. Network Section - Uncomment network.host: and http.port:
  2. Change the IP Address to 127.0.0.1 or 0.0.0.0
+
+```
+network.host: 0.0.0.0
+http.port: 9200
+```
+
+Note:
 
     - 127.0.0.1 will set Elasticsearch to accept connections from the localhost only
     - 0.0.0.0 will set Elasticsearch to accept connections from any host (i.e. remote systems)
+    - If you set network.host to 0.0.0.0 you must set the seed hosts
+ 3. Discovery Section - add the following if network host is 0.0.0.0
  
- 3. Exit --> Save
- 4. Restart the Elasticsearch service and check that it is up and running
+```
+discovery.seed_hosts:
+   - 0.0.0.0:9300
+   - IP_ADDRESS:9300 # Put your elasticsearch host IP
+```
+
+ 4. Exit --> Save
+ 5. Restart the Elasticsearch service and check that it is up and running
 
  ```
  sudo systemctl restart elasticsearch.service
