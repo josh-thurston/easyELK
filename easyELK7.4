@@ -1,0 +1,97 @@
+#!/bin/bash
+
+echo "$(tput setaf 1) ---- Performing upgrade ----"
+sudo apt update -y
+sudo apt upgrade -y
+echo "$(tput setaf 1) ---- Setting Timezone to America/Chicago ----"
+sudo timedatectl set-timezone America/Chicago
+date
+echo "$(tput setaf 1) ---- Installing Java 8 ----"
+sudo apt install openjdk-8-jdk
+# Install Elasticsearch Debian Package 
+# ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
+echo "$(tput setaf 1) ---- Setting up public signing key ----"
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "$(tput setaf 1) ---- Installing the apt-transport-https package ----"
+sudo apt-get install apt-transport-https
+sudo apt update
+echo "$(tput setaf 1) ---- Saving Repository Definition to /etc/apt/sources/list.d/elastic-7.x.list ----"
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+echo "$(tput setaf 1) ---- Installing the Elasticsearch Debian Package ----"
+sudo apt-get update && sudo apt-get install elasticsearch
+echo "$(tput setaf 1) ---- Installing the Kibana Debian Package ----"
+sudo apt-get install kibana
+echo "$(tput setaf 1) ---- Installing Logstash ----"
+sudo apt-get install logstash
+echo "$(tput setaf 1) ---- Installing Filebeat ----"
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.4.0-amd64.deb
+sudo dpkg -i filebeat-7.4.0-amd64.deb
+sudo rm filebeat*
+sudo filebeat modules enable system
+sudo filebeat modules enable cisco
+sudo filebeat modules enable netflow
+sudo filebeat modules enable osquery
+sudo filebeat modules enable elasticsearch
+sudo filebeat modules enable kibana
+sudo filebeat modules enable logstash
+echo "$(tput setaf 1) ---- Installing Metricbeat ----"
+curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.4.0-amd64.deb
+sudo dpkg -i metricbeat-7.4.0-amd64.deb
+sudo rm metricbeat*
+sudo metricbeat modules enable elasticsearch
+sudo metricbeat modules enable kibana
+sudo metricbeat modules enable logstash
+sudo metricbeat modules enable system
+echo "$(tput setaf 1) ---- Installing Packetbeat ----"
+sudo apt-get install libpcap0.8
+curl -L -O https://artifacts.elastic.co/downloads/beats/packetbeat/packetbeat-7.4.0-amd64.deb
+sudo dpkg -i packetbeat-7.4.0-amd64.deb
+sudo rm packetbeat*
+echo "$(tput setaf 1) ---- Installing Auditbeat ----"
+curl -L -O https://artifacts.elastic.co/downloads/beats/auditbeat/auditbeat-7.4.0-amd64.deb
+sudo dpkg -i auditbeat-7.4.0-amd64.deb
+sudo rm auditbeat*
+echo "$(tput setaf 1) ---- Starting Elasticsearch ----"
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+sudo /bin/systemctl start elasticsearch.service
+echo "$(tput setaf 1) ---- Starting Kibana ----"
+sudo /bin/systemctl enable kibana.service
+sudo /bin/systemctl start kibana.service
+echo "$(tput setaf 1) ---- Starting Logstash ----"
+sudo /bin/systemctl enable logstash.service
+sudo /bin/systemctl start logstash.service
+echo "$(tput setaf 1) ---- Starting Filebeat ----"
+sudo systemctl enable filebeat
+sudo systemctl start filebeat
+sudo filebeat setup -e
+sudo filebeat setup --dashboards
+sudo filebeat setup --index-management
+sudo filebeat setup --pipelines
+echo "$(tput setaf 1) ---- Starting Metricbeat ----"
+sudo systemctl enable metricbeat
+sudo systemctl start metricbeat
+sudo metricbeat setup -e
+sudo metricbeat setup --dashboards
+sudo metricbeat setup --index-management
+sudo metricbeat setup --pipelines
+echo "$(tput setaf 1) ---- Starting Packetbeat ----"
+sudo systemctl enable packetbeat
+sudo systemctl start packetbeat
+sudo packetbeat setup -e
+sudo packetbeat setup --dashboards
+sudo packetbeat setup --index-management
+sudo packetbeat setup --pipelines
+echo "$(tput setaf 1) ---- Starting Auditbeat ----"
+sudo systemctl enable auditbeat
+sudo systemctl start auditbeat
+sudo auditbeat setup -e
+sudo auditbeat setup --dashboards
+sudo auditbeat setup --index-management
+sudo auditbeat setup --pipelines
+echo "$(tput setaf 1) ---- Now It's Your Turn: Finsh Configuration ----"
+echo "$(tput setaf 3) 1. edit kibana.yml and change server.host to 0.0.0.0 so that you can connect to kibana from other systems http://IPADDRESS:5601"
+echo "$(tput setaf 3) 2. edit elasticsearch.yml and change network.host to 0.0.0.0 so that other systems can send data to elasticsearch"
+echo "$(tput setaf 3) 3. restart both services sudo systemctl restart elasticsearch kibana"
+
+
