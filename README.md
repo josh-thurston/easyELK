@@ -145,10 +145,18 @@ A couple key pointers:
 2. Understand the Event Processing Pipeline (inputs --> filters --> outputs).  Where is the data coming from, how will it be filtered, and where is the data shipped?
 3. You can, and most likely will, have multiple pipelines.  Learn how to work with pipelines.yml and logstash.conf
 
+## Configure Beats
+
+The script installed Filebeat, Auditbeat, Packetbeat, and Metricbeat on the server.  Check configure each of them to your specifications.
+
 ## Beats
 
 The goal is to get data, and the last piece is data collection.  Beats provides multiple 'shippers' to assist in data collection. For information on configuring Beats Family modules visit [Elastic Beats](https://www.elastic.co/products/beats)
-Fore more detailed information, visit the Elastic configuration guides below:
+
+Use my [easyBEATS](https://github.com/josh-thurston/easyBEATS) solution for Debian (Ubuntu), Mac, and Raspberry Pi (ARM) setup.
+
+## Additional Reference Materials
+Fore more detailed information on ELK, visit the Elastic configuration guides below:
 
 [Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/settings.html)
 
