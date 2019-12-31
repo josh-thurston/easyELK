@@ -6,8 +6,8 @@ Great for users who want to install quickly or for those who are new to ELK and 
 
 ## Prerequisites
 
-- System must be Debian-based / Ubuntu
-- Other OS flavors like RedHat , Centos, OpenSuSE require rpms and those are not supported with this script
+- System must be Debian-based / Ubuntu.  Not ARM architecture
+- Other OS flavors like RedHat, Centos, OpenSuSE require rpms and those are not supported with this script
 - Recommend you have a static IP set for your system.
 - Must be able to elevate to root
 
