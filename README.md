@@ -13,7 +13,12 @@ Great for users who want to install quickly or for those who are new to ELK and 
 
 ## How To Use
 
-1. Copy easyELK to the system where you want to run the ELK stack
+1. Copy, then navigate to easyELK in the system where you want to run the ELK stack 
+
+```
+git clone https://github.com/josh-thurston/easyELK.git && cd easyELK
+```
+
 2. Make easyELK executable 
 
 ```
